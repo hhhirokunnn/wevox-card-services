@@ -1,0 +1,13 @@
+current directory: /Users/DJ20026/privete_development/wevox-card-services/vendor/cache/gems/json-1.8.6/ext/json
+/Users/DJ20026/.rbenv/versions/2.6.3/bin/ruby -I /Users/DJ20026/.rbenv/versions/2.6.3/lib/ruby/2.6.0 -r ./siteconf20200117-81104-149cgai.rb extconf.rb
+creating Makefile
+
+current directory: /Users/DJ20026/privete_development/wevox-card-services/vendor/cache/gems/json-1.8.6/ext/json
+make "DESTDIR=" clean
+
+current directory: /Users/DJ20026/privete_development/wevox-card-services/vendor/cache/gems/json-1.8.6/ext/json
+make "DESTDIR="
+make: Nothing to be done for `all'.
+
+current directory: /Users/DJ20026/privete_development/wevox-card-services/vendor/cache/gems/json-1.8.6/ext/json
+make "DESTDIR=" install
