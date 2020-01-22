@@ -27,7 +27,7 @@ module Api
       def create
         token = JsonWebToken.encode(user_id: create_params[:username])
         time = Time.now + 1.hours.to_i
-        render json: { token: token, exp: time.strftime('%m-%d-%Y %H:%M'), payload: create_params }, status: :ok
+        render json: { token: token, payload: create_params }, status: :ok
         # @user = User.find_by_email(params[:email])
         # if @user&.authenticate(params[:password])
         #  token = JsonWebToken.encode(user_id: @user.id)
@@ -38,9 +38,6 @@ module Api
         #  render json: { error: 'unauthorized' }, status: :unauthorized
         # end
       end
-
-      # def destroy
-      # end
 
       private
 
