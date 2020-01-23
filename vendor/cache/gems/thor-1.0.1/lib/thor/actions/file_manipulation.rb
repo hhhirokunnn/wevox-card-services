@@ -210,9 +210,9 @@ class Thor
     #
     # ==== Examples
     #
-    #   inject_into_class "app/controllers/application_controller.rb", ApplicationController, "  filter_parameter :password\n"
+    #   inject_into_class "app/controllers/base_application_controller.rb", ApplicationController, "  filter_parameter :password\n"
     #
-    #   inject_into_class "app/controllers/application_controller.rb", ApplicationController do
+    #   inject_into_class "app/controllers/base_application_controller.rb", ApplicationController do
     #     "  filter_parameter :password\n"
     #   end
     #
@@ -255,7 +255,7 @@ class Thor
     #
     # ==== Example
     #
-    #   gsub_file 'app/controllers/application_controller.rb', /#\s*(filter_parameter_logging :password)/, '\1'
+    #   gsub_file 'app/controllers/base_application_controller.rb', /#\s*(filter_parameter_logging :password)/, '\1'
     #
     #   gsub_file 'README', /rake/, :green do |match|
     #     match << " no more. Use thor!"
@@ -322,7 +322,7 @@ class Thor
     # ==== Example
     #
     #   remove_file 'README'
-    #   remove_file 'app/controllers/application_controller.rb'
+    #   remove_file 'app/controllers/base_application_controller.rb'
     #
     def remove_file(path, config = {})
       return unless behavior == :invoke

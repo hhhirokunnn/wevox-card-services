@@ -3,10 +3,14 @@
 Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
-      get 'hello' => 'hello#index'
-      get 'test' => 'sessions#index'
-      post   'login'      => 'sessions#create'
-      delete 'logout'     => 'sessions#destroy'
+      resources :users
+      resources :games do
+        resources :players
+        resources :cards
+      end
+      put 'start_game' => 'games#start_game'
+      post  'login' => 'sessions#create'
+      get   'test' => 'sessions#index'
     end
   end
 end

@@ -15,7 +15,7 @@ module ActionController #:nodoc:
       # flash types other than the default <tt>alert</tt> and <tt>notice</tt> in
       # your controllers and views. For instance:
       #
-      #   # in application_controller.rb
+      #   # in base_application_controller.rb
       #   class ApplicationController < ActionController::Base
       #     add_flash_types :warning
       #   end
