@@ -5,12 +5,6 @@ module Api
     class UsersController < Api::ApplicationController
       skip_before_action :authorize_request, only: [:create]
 
-      # for debug
-      skip_before_action :authorize_request, only: [:index]
-      def index
-        render status: :ok, json: {status: 200, message: "created", data: {user: User.all}}
-      end
-
       def create
         new_user = User.new(name: create_params[:user_name], password: create_params[:password])
         return render status: :ok, json: {message: "created", data: {}} if new_user.save
