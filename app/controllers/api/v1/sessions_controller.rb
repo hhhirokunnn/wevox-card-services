@@ -3,7 +3,6 @@
 module Api
   module V1
     class SessionsController < ApplicationController
-
       skip_before_action :authorize_request, only: [:create]
 
       def index
@@ -15,7 +14,7 @@ module Api
         if @current_user&.authenticate(create_params[:password])
           token = JsonWebToken.encode(user_id: @current_user.id)
           time = Time.now + 24.hours.to_i
-          render json: { token: token, exp: time.strftime("%m-%d-%Y %H:%M") }, status: :ok
+          render json: { token: token, exp: time.strftime('%m-%d-%Y %H:%M') }, status: :ok
         else
           render json: { error: 'unauthorized' }, status: :unauthorized
         end

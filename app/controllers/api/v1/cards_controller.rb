@@ -3,7 +3,6 @@
 module Api
   module V1
     class CardsController < Api::ApplicationController
-
       def index
         render status: 200, json: { status: 200, message: 'created', data: {} }
       end
