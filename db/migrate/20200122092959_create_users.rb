@@ -31,7 +31,7 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :game_id
       t.integer :player_id
       t.integer :card_id
-      t.column 'status', "ENUM ('initialized', 'drawn', 'thrown') DEFAULT 'initialized'"
+      t.column "status", "ENUM ('initialized', 'drawn', 'thrown') DEFAULT 'initialized'"
       t.timestamps
     end
 
@@ -39,8 +39,8 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :game_id
       t.integer :player_id
       t.integer :phase, default: 0
-      t.string :hand_cards, default: ''
-      t.string :thrown_cards, default: ''
+      t.string :hand_cards, default: ""
+      t.string :thrown_cards, default: ""
       t.timestamps
     end
   end

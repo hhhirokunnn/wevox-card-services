@@ -6,24 +6,31 @@ module Api
       skip_before_action :authorize_request, only: [:create]
 
       def index
-        render json: { data: @decoded }, status: 200
+        render json: {data: @decoded}, status: :ok
       end
 
       def create
-        @current_user = User.find_by_name(create_params[:user_name])
-        if @current_user&.authenticate(create_params[:password])
-          token = JsonWebToken.encode(user_id: @current_user.id)
-          time = Time.now + 24.hours.to_i
-          render json: { token: token, exp: time.strftime('%m-%d-%Y %H:%M') }, status: :ok
-        else
-          render json: { error: 'unauthorized' }, status: :unauthorized
-        end
+        user = User.find_by(name: create_params[:user_name])
+        return render json: {error: "unauthorized"}, status: :unauthorized unless login?(user)
+
+        token, time = login_token(user)
+        render json: {token: token, exp: time.strftime("%m-%d-%Y %H:%M")}, status: :ok
       end
 
       private
 
       def create_params
         params.permit(:user_name, :password)
+      end
+
+      def login?(user)
+        user&.authenticate(create_params[:password])
+      end
+
+      def login_token(user)
+        token = JsonWebToken.encode(user_id: user.id)
+        time = Time.zone.now + 24.hours.to_i
+        [token, time]
       end
     end
   end

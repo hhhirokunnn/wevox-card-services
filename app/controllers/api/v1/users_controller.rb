@@ -8,25 +8,23 @@ module Api
       # for debug
       skip_before_action :authorize_request, only: [:index]
       def index
-        render status: 200, json: { status: 200, message: 'created', data: { user: User.all } }
+        render status: :ok, json: {status: 200, message: "created", data: {user: User.all}}
       end
 
       def create
         new_user = User.new(name: create_params[:user_name], password: create_params[:password])
-        if new_user.save
-          return render status: 200, json: { message: 'created', data: {} }
-        end
+        return render status: :ok, json: {message: "created", data: {}} if new_user.save
 
-        render status: 400, json: { message: 'not created', data: { error: new_user.errors } }
+        render status: :bad_request, json: {message: "not created", data: {error: new_user.errors}}
       end
 
       def destroy
         unless @current_user.id.to_s == params[:id]
-          return render status: 400, json: { message: 'not deleted', data: { error: 'incorrect parameter' } }
+          return render status: :bad_request, json: {message: "not deleted", data: {error: "incorrect parameter"}}
         end
 
         @current_user.delete
-        render status: 200, json: { message: 'deleted', data: {} }
+        render status: :ok, json: {message: "deleted", data: {}}
       end
 
       private
