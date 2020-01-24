@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class CardsController < Api::ApplicationController
+    class CardsController < Api::ApiBaseController
       def index
         render status: :ok, json: {status: 200, message: "created", data: {}}
       end

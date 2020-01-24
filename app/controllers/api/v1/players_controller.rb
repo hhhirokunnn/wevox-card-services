@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class PlayersController < Api::ApplicationController
+    class PlayersController < Api::ApiBaseController
       def index
         render status: :ok, json: {status: 200, message: "created", data: {}}
       end

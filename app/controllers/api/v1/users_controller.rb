@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class UsersController < Api::ApplicationController
+    class UsersController < Api::ApiBaseController
       skip_before_action :authorize_request, only: [:create]
 
       def create

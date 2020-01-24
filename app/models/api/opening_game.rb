@@ -15,18 +15,25 @@ module Api
     class << self
       def all
         games = Game.active.all
-        Api::OpeningGame.new(opening_games: games)
-      end
-
-      def create(player:)
-        Player.transaction do
-          new_game = Game.create!
-          new_player = Player.transaction(requires_new: true) do
-            Player.create!(game_id: new_game.id, user_id: player.id)
-          end
-          Api::OpeningGame.new(game: new_game, players: [new_player])
+        games.map do |g|
+          Api::OpeningGame.new(game: g, players: g.players)
         end
       end
+
+      def find(game_id)
+        game = Game.find_by(id: game_id)
+        Api::OpeningGame.new(game: game, players: game.players)
+      end
+
+      def create(user:)
+        raise PlayerDoingGameError.new if user.active_player
+
+        owner = GameOwner.new(user: user)
+        owner.open_game
+      end
     end
+  end
+
+  class PlayerDoingGameError < StandardError
   end
 end

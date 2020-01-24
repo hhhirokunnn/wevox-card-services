@@ -9,8 +9,7 @@ Rails.application.routes.draw do
         resources :cards
       end
       put "start_game/:id" => "games#start_game"
-      post  "login" => "sessions#create"
-      get   "test" => "sessions#index"
+      post "login" => "sessions#create"
     end
   end
 end

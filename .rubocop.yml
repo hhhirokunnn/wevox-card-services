@@ -16,6 +16,9 @@ Layout/LineLength:
 Rails/HelperInstanceVariable:
   Enabled: false
 
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
 # Too short methods lead to extraction of single-use methods, which can make
 # the code easier to read (by naming things), but can also clutter the class
 Metrics/MethodLength:
@@ -63,7 +66,6 @@ Style/CollectionMethods:
   PreferredMethods:
     # inject seems more common in the community.
     reduce: "inject"
-
 
 # Either allow this style or don't. Marking it as safe with parenthesis
 # is silly. Let's try to live without them for now.
