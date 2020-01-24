@@ -4,15 +4,15 @@ module Api
   module V1
     class GamesController < Api::ApiBaseController
       def index
-        games = Api::OpeningGame.all
-        render status: :ok, json: {data: games}
+        opening_games = Api::OpeningGame.all
+        render status: :ok, json: {data: opening_games}
       end
 
       def show
-        games = Api::OpeningGame.all
-        return render status: :not_found, json: {data: {error: {message: "not found"}}} unless game
+        opening_game = Api::OpeningGame.find(params[:id])
+        return render status: :not_found, json: {data: {error: {message: "not found"}}} unless opening_game
 
-        render status: :ok, json: {data: games}
+        render status: :ok, json: {data: opening_game}
       end
 
       def create
@@ -38,10 +38,12 @@ module Api
 
       def start_game
         owner = GameOwner.new(user: @current_user)
-        game = owner.start_game
-        render status: :ok, json: {data: {game: game}}
+        opening_game = owner.start_game
+        render status: :ok, json: {data: opening_game}
       rescue GameNotFoundError => e
         render status: :not_found, json: {data: {error: {content: e.class.to_s, message: "game not found"}}}
+      rescue GameStartedError => e
+        render status: :not_found, json: {data: {error: {content: e.class.to_s, message: "game already started"}}}
       rescue StandardError => e
         render status: :internal_server_error, json: {data: {error: {content: e, message: "internal server error"}}}
       end

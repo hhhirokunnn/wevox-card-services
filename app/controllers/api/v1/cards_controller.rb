@@ -7,9 +7,17 @@ module Api
         render status: :ok, json: {status: 200, message: "created", data: {}}
       end
 
-      def create; end
+      def update
+        render status: :ok, json: {status: 200, message: "created", data: {}}
+      end
 
       def delete; end
+
+      private
+
+      def update_params
+        params.permit(:game_id, :id)
+      end
     end
   end
 end
