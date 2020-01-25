@@ -5,47 +5,45 @@ module Api
     class GamesController < Api::ApiBaseController
       def index
         opening_games = Api::OpeningGame.all
-        render status: :ok, json: {data: opening_games}
+        render_ok preload: opening_games
       end
 
       def show
         opening_game = Api::OpeningGame.find(params[:id])
-        return render status: :not_found, json: {data: {error: {message: "not found"}}} unless opening_game
-
-        render status: :ok, json: {data: opening_game}
+        render_ok preload: opening_game
+      rescue StandardError => e
+        render_error error: e
       end
 
       def create
         new_game = Api::OpeningGame.create(user: @current_user)
-        render status: :ok, json: {data: new_game}
+        render_ok preload: new_game
       rescue PlayerDoingGameError => e
-        render status: :forbidden,
-               json:   {data: {error: {content: e.message, message: "player playing the other game"}}}
+        render_error error: e, message: "player playing the other game"
       rescue StandardError => e
-        render status: :internal_server_error,
-               json:   {data: {error: {content: e.message, message: "internal server error"}}}
+        render_error error: e
       end
 
       def destroy
         owner = GameOwner.new(user: @current_user)
         game = owner.close_game
-        render status: :ok, json: {data: {game: game}}
+        render_ok preload: game
       rescue GameNotFoundError => e
-        render status: :not_found, json: {data: {error: {content: e.class.to_s, message: "game not found"}}}
+        render_error error: e, message: "game not found"
       rescue StandardError => e
-        render status: :internal_server_error, json: {data: {error: {content: e, message: "internal server error"}}}
+        render_error error: e
       end
 
       def start_game
         owner = GameOwner.new(user: @current_user)
         opening_game = owner.start_game
-        render status: :ok, json: {data: opening_game}
+        render_ok preload: opening_game
       rescue GameNotFoundError => e
-        render status: :not_found, json: {data: {error: {content: e.class.to_s, message: "game not found"}}}
+        render_error error: e, message: "game not found"
       rescue GameStartedError => e
-        render status: :not_found, json: {data: {error: {content: e.class.to_s, message: "game already started"}}}
+        render_error error: e, message: "game already started"
       rescue StandardError => e
-        render status: :internal_server_error, json: {data: {error: {content: e, message: "internal server error"}}}
+        render_error error: e
       end
 
       # def out_game; end

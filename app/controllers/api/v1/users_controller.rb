@@ -7,18 +7,18 @@ module Api
 
       def create
         new_user = User.new(name: create_params[:user_name], password: create_params[:password])
-        return render status: :ok, json: {message: "created", data: {}} if new_user.save
+        return render_error error: UserNotCreatedError, message: new_user.errors unless new_user.save
 
-        render status: :bad_request, json: {message: "not created", data: {error: new_user.errors}}
+        render_ok preload: new_user if new_user.save
       end
 
       def destroy
         unless @current_user.id.to_s == params[:id]
-          return render status: :bad_request, json: {message: "not deleted", data: {error: "incorrect parameter"}}
+          return render_error error: UserNotDeletedError, message: "incorrect parameter"
         end
 
         @current_user.delete
-        render status: :ok, json: {message: "deleted", data: {}}
+        render_ok preload: @current_user
       end
 
       private
@@ -27,5 +27,17 @@ module Api
         params.permit(:user_name, :password)
       end
     end
+  end
+end
+
+class UserNotCreatedError < Errors::WevoxCardError
+  def initialize(message="UserNotCreatedError")
+    super(status: 400, message:  message)
+  end
+end
+
+class UserNotDeletedError < Errors::WevoxCardError
+  def initialize(message="UserNotDeletedError")
+    super(status: 400, message:  message)
   end
 end

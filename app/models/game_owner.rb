@@ -37,8 +37,14 @@ class GameOwner
   end
 end
 
-class GameNotFoundError < StandardError
+class GameNotFoundError < Errors::WevoxCardError
+  def initialize(message="GameNotFoundError")
+    super(status: 404, message:  message)
+  end
 end
 
-class GameStartedError < StandardError
+class GameStartedError < Errors::WevoxCardError
+  def initialize(message="GameStartedError")
+    super(status: 405, message:  message)
+  end
 end

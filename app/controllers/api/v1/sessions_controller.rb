@@ -7,10 +7,10 @@ module Api
 
       def create
         user = User.find_by(name: create_params[:user_name])
-        return render json: {error: "unauthorized"}, status: :unauthorized unless login?(user)
+        render_error error: Errors::UnAuthorizedError unless login?(user)
 
         token, time = login_token(user)
-        render json: {token: token, exp: time.strftime("%m-%d-%Y %H:%M")}, status: :ok
+        render_ok preload: {token: token, exp: time.strftime("%m-%d-%Y %H:%M")}
       end
 
       private

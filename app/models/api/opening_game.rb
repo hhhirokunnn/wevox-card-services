@@ -22,11 +22,13 @@ module Api
 
       def find(game_id)
         game = Game.find_by(id: game_id)
-        Api::OpeningGame.new(game: game, players: game.players)
+        raise OpeningGameNotFoundError unless game || game&.players
+
+        Api::OpeningGame.new(game: game, players: game&.players)
       end
 
       def create(user:)
-        raise PlayerDoingGameError.new if user.active_player
+        raise PlayerDoingGameError if user.active_player
 
         owner = GameOwner.new(user: user)
         owner.open_game
@@ -34,6 +36,15 @@ module Api
     end
   end
 
-  class PlayerDoingGameError < StandardError
+  class PlayerDoingGameError < Errors::WevoxCardError
+    def initialize(message="PlayerDoingGameError")
+      super(status: 405, message:  message)
+    end
+  end
+
+  class OpeningGameNotFoundError < Errors::WevoxCardError
+    def initialize(message="OpeningGameNotFoundError")
+      super(status: 404, message:  message)
+    end
   end
 end
