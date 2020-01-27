@@ -55,3 +55,5 @@ gem "rubocop", require: false
 gem "rubocop-rails"
 
 gem 'puma'
+gem 'rack-cors'
+
