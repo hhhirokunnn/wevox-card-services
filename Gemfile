@@ -53,3 +53,5 @@ gem "bcrypt", "~> 3.1.7"
 gem "mysql2"
 gem "rubocop", require: false
 gem "rubocop-rails"
+
+gem 'puma'

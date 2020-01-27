@@ -1,0 +1,16 @@
+defaults: &defaults
+
+development:
+  MY_LOCALHOST_NAME: 'w022581906B77m.local'
+
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults
+

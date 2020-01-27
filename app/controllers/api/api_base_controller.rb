@@ -3,7 +3,7 @@
 module Api
   class ApiBaseController < ApplicationController
     include SessionHelper
-    protect_from_forgery
+    protect_from_forgery with: :exception
     before_action :authorize_request
 
     def render_ok(response_message: "ok", preload:)
