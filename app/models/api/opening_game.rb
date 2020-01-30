@@ -3,14 +3,25 @@
 module Api
   class OpeningGame
     include ActiveModel::Model
-
-    # OpeningGame
-    attr_accessor :game
-    validates :game, presence: true
-
+    attr_accessor :id, :started, :finished
     attr_accessor :players
-    validates :players, presence: true
-    validates :players, length: {maximum: 4}
+
+    def initialize(game:, players:)
+      @id = game.id
+      @started = game.started
+      @finished = game.finished
+      @players = players.map {|p| OpeningGamePlayer.new(player: p) }
+    end
+
+    class OpeningGamePlayer
+      include ActiveModel::Model
+      attr_accessor :id, :name
+
+      def initialize(player:)
+        @id = player.id
+        @name = player.user.name
+      end
+    end
 
     class << self
       def all
