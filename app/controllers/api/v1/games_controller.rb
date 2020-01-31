@@ -3,6 +3,7 @@
 module Api
   module V1
     class GamesController < Api::ApiBaseController
+
       def index
         opening_games = Api::OpeningGame.all
         render_ok preload: opening_games
@@ -46,7 +47,11 @@ module Api
         render_error error: e
       end
 
-      # def out_game; end
+      private
+
+      def start_game_params
+        params.permit(:game_id, :player_id)
+      end
     end
   end
 end

@@ -3,7 +3,6 @@
 module Api
   class PlayerCard
     include ActiveModel::Model
-    include PlayCardService
     attr_accessor :id, :title, :status
     attr_accessor :game_id
     attr_accessor :player
@@ -18,23 +17,6 @@ module Api
           end
         end
         player_cards.compact
-      end
-
-      def create(game_id:, player_id:)
-        opening_game = Api::OpeningGame.find(game_id: game_id)
-        raise OpeningGameNotFoundError unless opening_game
-
-        player = opening_game.players.find {|p| p.id == player_id }
-        PlayCardService.drawn_by(player)
-        all(game_id: game_id)
-      end
-
-      def create_all(game_id:)
-        opening_game = Api::OpeningGame.find(game_id: game_id)
-        raise OpeningGameNotFoundError unless opening_game
-
-        initial_deal_in(opening_game: opening_game)
-        all(game_id: game_id)
       end
     end
 

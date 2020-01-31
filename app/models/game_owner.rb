@@ -25,12 +25,15 @@ class GameOwner
 
   def start_game
     # TODO: is_owner?
+    puts 'aaaaa'
+    puts game_owner.active_player
+    puts game_owner.active_player.game.id
     Game.transaction do
       player = game_owner.active_player
       opening_game = Api::OpeningGame.find(game_id: player.game.id)
       raise GameStartedError if opening_game.started
 
-      deal_at(opening_game: opening_game)
+      initial_deal_in(game: opening_game, players: opening_game.players)
       started_game = started_by(player: player)
       Api::OpeningGame.find(game_id: started_game.id)
     end

@@ -3,13 +3,12 @@
 module PlayCardService
   PLAYER_CARDS_COUNT = 5
 
-  def initial_deal_in(opening_game:)
+  def initial_deal_in(game:, players:)
     PlayCard.transaction do
       cards = Card.select(:id).all
       play_cards = cards.shuffle.map do |card|
-        PlayCard.create(game_id: opening_game.id, card_id: card.id)
+        PlayCard.create(game_id: game.id, card_id: card.id)
       end
-      players = opening_game.players
       initial_deal(play_cards: play_cards[0..players.size * 5 - 1], players: players)
     end
   end
@@ -17,8 +16,16 @@ module PlayCardService
   def drawn_by(player:)
     PlayCard.transaction do
       play_card = PlayCard.find_by(game_id: player.game_id, status: "initialized")
-      play_card.update(player_id: player.id)
+      raise GameNotStartedError unless play_card
+
+      deal(play_card: play_card, player: player)
     end
+  end
+
+  def throw(play_card:)
+    play_card.status = "thrown"
+    play_card.save
+    play_card
   end
 
   private
@@ -33,6 +40,15 @@ module PlayCardService
   end
 
   def deal(play_card:, player:)
-    play_card.update(player_id: player.id, status: "drawn")
+    play_card.player_id = player.id
+    play_card.status = "drawn"
+    play_card.save
+    play_card
+  end
+
+  class GameNotStartedError < Errors::WevoxCardError
+    def initialize(message="GameNotStartedError")
+      super(status: 400, message:  message)
+    end
   end
 end
