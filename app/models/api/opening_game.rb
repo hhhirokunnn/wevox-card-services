@@ -3,35 +3,15 @@
 module Api
   class OpeningGame
     include ActiveModel::Model
-    attr_accessor :id, :started, :finished
-    attr_accessor :players
-
-    def initialize(game:, players:)
-      @id = game.id
-      @started = game.started
-      @finished = game.finished
-      @players = players.map {|p| OpeningGamePlayer.new(player: p) }
-    end
-
-    class OpeningGamePlayer
-      include ActiveModel::Model
-      attr_accessor :id, :name
-
-      def initialize(player:)
-        @id = player.id
-        @name = player.user.name
-      end
-    end
+    attr_accessor :id, :started, :finished, :players
 
     class << self
       def all
         games = Game.active.all
-        games.map do |g|
-          Api::OpeningGame.new(game: g, players: g.players)
-        end
+        games.map {|g| Api::OpeningGame.new(game: g, players: g.players) }
       end
 
-      def find(game_id)
+      def find(game_id:)
         game = Game.find_by(id: game_id)
         raise OpeningGameNotFoundError unless game || game&.players
 
@@ -44,6 +24,15 @@ module Api
         owner = GameOwner.new(user: user)
         owner.open_game
       end
+    end
+
+    private
+
+    def initialize(game:, players:)
+      @id = game.id
+      @started = game.started
+      @finished = game.finished
+      @players = players.map {|p| Api::OpeningGamePlayer.new(player: p) }
     end
   end
 

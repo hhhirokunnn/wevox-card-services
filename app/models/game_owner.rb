@@ -26,13 +26,13 @@ class GameOwner
   def start_game
     # TODO: is_owner?
     Game.transaction do
-      game = game_owner.active_player&.game
-      raise GameNotFoundError unless game
-      raise GameStartedError if game.started
+      player = game_owner.active_player
+      opening_game = Api::OpeningGame.find(game_id: player.game.id)
+      raise GameStartedError if opening_game.started
 
-      deal_at(game: game)
-      started_game = started_by(player: game_owner.active_player)
-      Api::OpeningGame.find(started_game.id)
+      deal_at(opening_game: opening_game)
+      started_game = started_by(player: player)
+      Api::OpeningGame.find(game_id: started_game.id)
     end
   end
 end

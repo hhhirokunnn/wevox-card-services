@@ -9,4 +9,5 @@ class Game < ApplicationRecord
 
   scope :ready, -> { where(started: false, finished: false) }
   scope :active, -> { where(finished: false) }
+  scope :situation, ->(id) { eager_load(:players).eager_load(:play_cards).find_by(games: {id: id}) }
 end

@@ -9,7 +9,7 @@ module Api
       end
 
       def show
-        opening_game = Api::OpeningGame.find(params[:id])
+        opening_game = Api::OpeningGame.find(game_id: params[:id])
         render_ok preload: opening_game
       rescue StandardError => e
         render_error error: e
